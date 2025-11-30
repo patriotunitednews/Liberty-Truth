@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>Liberty Truth - Feed</title>
+    <link rel=\"stylesheet\" href=\"css/styles.css\">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-container container">
+        <a href="feed.html" class="logo">
+            <img src="images/logo.png" alt="Liberty Truth Logo" class="navbar-logo">
+            <span>Liberty Truth</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href=\"feed.html\" class=\"active\">Feed</a></li>
+            <li><a href=\"creators.html\">Creators</a></li>
+            <li><a href=\"marketplace.html\">Marketplace</a></li>
+            <li><a href=\"live.html\">Live</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="feed-wrapper container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+        <div class="user-card">
+            <img src="images/placeholder-avatar.png" alt="Avatar" class="avatar">
+            <h3 id="sidebarEmail">User Email</h3>
+            <p class="user-bio" id="sidebarBio">User bio goes here</p>
+            <div class="user-stats">
+                <div class="stat">
+                    <strong id="postCount">0</strong>
+                    <span>Posts</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Feed -->
+    <main class="feed">
+        <div class="post-composer">
+            <div class="composer-input">
+                <form id="postForm">
+                    <textarea name="content" placeholder="What's on your mind?" required></textarea>
+                    <input type="file" name="image" accept="image/*">
+                    <button type="submit" class="btn-primary">Post</button>
+                </form>
+            </div>
+        </div>
+
+        <ul class="feed-content" id="postList">
+            <!-- Posts will be dynamically added here -->
+        </ul>
+    </main>
+
+    <!-- Right Sidebar -->
+    <aside class="right-sidebar">
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="Search creators or posts...">
+        </div>
+        <div class="recommendations">
+            <h4>Recommended Creators</h4>
+            <div class=\"creator-item\">
+                <img src=\"images/placeholder-avatar.png\" alt=\"Creator\">
+                <div>
+                    <h5>Creator Name</h5>
+                    <p>@handle</p>
+                </div>
+                <button class="btn-follow">Follow</button>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<script src=\"js/app.js\"></script>
+<script>
+    // Logout
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('ltCurrentUser');
+        window.location.href = 'index.html';
+    });
+
+    // Load sidebar info
+    const currentUser = JSON.parse(localStorage.getItem('ltCurrentUser'));
+    if (currentUser) {
+        document.getElementById('sidebarEmail').textContent = currentUser.email;
+        document.getElementById('sidebarBio').textContent = currentUser.profile.bio || 'No bio yet';
+    }
+
+    // Feed rendering handled in app.js
+</script>
+
+</body>
+</html>

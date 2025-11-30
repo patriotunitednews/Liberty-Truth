@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liberty Truth — Settings</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <a href="feed.html" class="brand">
+      <img src="images/logo.png" alt="Liberty Truth Logo" class="navbar-logo">
+      <span>Liberty Truth</span>
+    </a>
+    <nav class="nav">
+      <a href="feed.html">Home</a>
+      <a href="live.html">Live</a>
+      <a href="creators.html">Creators</a>
+      <a href="profile.html">Profile</a>
+      <a href="settings.html">Settings</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="index.html">Log Out</a>
+    </nav>
+  </header>
+
+  <!-- SETTINGS -->
+  <main class="settings-page">
+    <h1>Settings</h1>
+
+    <section class="account-settings">
+      <h2>Account</h2>
+      <form id="accountSettingsForm">
+        <label>Email <input type="email" name="email" required></label>
+        <label>Change Password <input type="password" name="newPassword"></label>
+        <button type="submit">Save Account Settings</button>
+      </form>
+    </section>
+
+    <section class="privacy-settings">
+      <h2>Privacy</h2>
+      <form id="privacySettingsForm">
+        <label>
+          <input type="checkbox" name="privateAccount">
+          Make my account private
+        </label>
+        <label>
+          <input type="checkbox" name="hideOnlineStatus">
+          Hide my online status
+        </label>
+        <button type="submit">Save Privacy Settings</button>
+      </form>
+    </section>
+
+    <section class="notifications-settings">
+      <h2>Notifications</h2>
+      <form id="notificationsSettingsForm">
+        <label>
+          <input type="checkbox" name="emailNotifications" checked>
+          Email notifications
+        </label>
+        <label>
+          <input type="checkbox" name="pushNotifications" checked>
+          Push notifications
+        </label>
+        <button type="submit">Save Notification Settings</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>

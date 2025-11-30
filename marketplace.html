@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>Liberty Truth - Marketplace</title>
+    <link rel=\"stylesheet\" href=\"css/styles.css\">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-container container">
+        <a href="feed.html" class="logo">
+            <img src="images/logo.png" alt="Liberty Truth Logo" class="navbar-logo">
+            <span>Liberty Truth</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href=\"feed.html\">Feed</a></li>
+            <li><a href=\"creators.html\">Creators</a></li>
+            <li><a href=\"marketplace.html\" class=\"active\">Marketplace</a></li>
+            <li><a href=\"live.html\">Live</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- Marketplace controls -->
+    <div class="marketplace-controls">
+        <input type="text" id="productSearch" class="search-input" placeholder="Search products...">
+        <select id="productSort" class="filter-select">
+            <option value="priceLowHigh">Price: Low to High</option>
+            <option value="priceHighLow">Price: High to Low</option>
+            <option value="newest">Newest</option>
+        </select>
+    </div>
+
+    <!-- Products grid -->
+    <div class="products-grid" id="productsGrid">
+        <!-- Product cards will be dynamically added here -->
+    </div>
+</div>
+
+<script src=\"js/app.js\"></script>
+<script>
+    // Logout
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('ltCurrentUser');
+        window.location.href = 'index.html';
+    });
+
+    // Example product data
+    const products = [
+        {id:1, name:'Patriot T-Shirt', description:'High-quality cotton t-shirt.', price:25, image:'images/placeholder-avatar.png'},
+        {id:2, name:'Liberty Hat', description:'Adjustable cap with logo.', price:18, image:'images/placeholder-avatar.png'},
+        {id:3, name:'Freedom Mug', description:'Ceramic mug with design.', price:12, image:'images/placeholder-avatar.png'},
+        {id:4, name:'Flag Sticker Pack', description:'Set of 5 stickers.', price:8, image:'images/placeholder-avatar.png'}
+    ];
+
+    const productsGrid = document.getElementById('productsGrid');
+
+    function renderProducts(list) {
+        productsGrid.innerHTML = '';
+        list.forEach(p => {
+            const card = document.createElement('div');
+            card.classList.add('product-card');
+            card.innerHTML = `
+                <div class="product-image">
+                    <img src="${p.image}" alt="${p.name}">
+                </div>
+                <h3>${p.name}</h3>
+                <p class="product-description">${p.description}</p>
+                <div class="product-footer">
+                    <span class="product-price">$${p.price}</span>
+                    <button class="btn-primary" data-id="${p.id}">Add to Cart</button>
+                </div>
+            `;
+            productsGrid.appendChild(card);
+        });
+
+        // Add-to-cart functionality
+        const addButtons = document.querySelectorAll('.btn-primary');
+        addButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const productId = parseInt(btn.getAttribute('data-id'));
+                alert(`Product ID ${productId} added to cart!`);
+                // Later, you can implement full cart system in app.js
+            });
+        });
+    }
+
+    // Initial render
+    renderProducts(products);
+
+    // Search functionality
+    const productSearch = document.getElementById('productSearch');
+    productSearch.addEventListener('input', () => {
+        const query = productSearch.value.toLowerCase();
+        const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+        renderProducts(filtered);
+    });
+
+    // Sort functionality
+    const productSort = document.getElementById('productSort');
+    productSort.addEventListener('change', () => {
+        let sorted = [...products];
+        if (productSort.value === 'priceLowHigh') {
+            sorted.sort((a,b) => a.price - b.price);
+        } else if (productSort.value === 'priceHighLow') {
+            sorted.sort((a,b) => b.price - a.price);
+        } else if (productSort.value === 'newest') {
+            sorted.sort((a,b) => a.id - b.id);
+        }
+        renderProducts(sorted);
+    });
+</script>
+</body>
+</html>

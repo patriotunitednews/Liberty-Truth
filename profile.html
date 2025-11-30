@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>Liberty Truth - Profile</title>
+    <link rel=\"stylesheet\" href=\"css/styles.css\">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-container container">
+        <a href="feed.html" class="logo">
+            <img src="images/logo.png" alt="Liberty Truth Logo" class="navbar-logo">
+            <span>Liberty Truth</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href=\"feed.html\">Feed</a></li>
+            <li><a href=\"creators.html\">Creators</a></li>
+            <li><a href=\"marketplace.html\">Marketplace</a></li>
+            <li><a href=\"live.html\">Live</a></li>
+            <li><a href="profile.html" class="active">Profile</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="profile-header">
+        <div class="profile-cover"></div>
+        <div class="profile-info">
+            <img src="images/placeholder-avatar.png" alt="Avatar" class="profile-avatar" id="profileAvatar">
+            <div class="profile-details">
+                <h1 id="profileName">User Name</h1>
+                <p class="profile-handle" id="profileHandle">@handle</p>
+                <p class="profile-bio" id="profileBio">User bio goes here</p>
+            </div>
+            <button id="editProfileBtn" class="btn-primary">Edit Profile</button>
+        </div>
+    </div>
+
+    <div class="profile-stats">
+        <div class="stat">
+            <strong id="profilePosts">0</strong>
+            <span>Posts</span>
+        </div>
+        <div class="stat">
+            <strong id="profileFollowers">0</strong>
+            <span>Followers</span>
+        </div>
+        <div class="stat">
+            <strong id="profileFollowing">0</strong>
+            <span>Following</span>
+        </div>
+    </div>
+
+    <div class="profile-tabs">
+        <button class="tab-btn active" data-tab="myPosts">My Posts</button>
+        <button class="tab-btn" data-tab="likedPosts">Liked</button>
+    </div>
+
+    <div id="myPosts" class="tab-content active">
+        <ul class="feed-content" id="userPostList">
+            <!-- User posts will appear here -->
+        </ul>
+    </div>
+
+    <div id="likedPosts" class="tab-content">
+        <ul class="feed-content" id="likedPostList">
+            <!-- Liked posts will appear here -->
+        </ul>
+    </div>
+</div>
+
+<script src=\"js/app.js\"></script>
+<script>
+    // Logout
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('ltCurrentUser');
+        window.location.href = 'index.html';
+    });
+
+    // Load user data
+    const currentUser = JSON.parse(localStorage.getItem('ltCurrentUser'));
+    if (currentUser) {
+        document.getElementById('profileName').textContent = currentUser.name || currentUser.email;
+        document.getElementById('profileHandle').textContent = currentUser.handle || '@' + (currentUser.name || 'user');
+        document.getElementById('profileBio').textContent = currentUser.profile.bio || 'No bio yet';
+        document.getElementById('profileAvatar').src = currentUser.profile.avatar || 'images/placeholder-avatar.png';
+        document.getElementById('profilePosts').textContent = currentUser.posts ? currentUser.posts.length : 0;
+        document.getElementById('profileFollowers').textContent = currentUser.followers ? currentUser.followers.length : 0;
+        document.getElementById('profileFollowing').textContent = currentUser.following ? currentUser.following.length : 0;
+    }
+
+    // Tabs
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const tabId = tab.getAttribute('data-tab');
+            contents.forEach(c => c.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+
+    // Edit Profile (popup or modal handled in JS)
+    const editBtn = document.getElementById('editProfileBtn');
+    editBtn.addEventListener('click', () => {
+        const newBio = prompt('Enter new bio:', currentUser.profile.bio || '');
+        if (newBio !== null) {
+            currentUser.profile.bio = newBio;
+            localStorage.setItem('ltCurrentUser', JSON.stringify(currentUser));
+            document.getElementById('profileBio').textContent = newBio;
+            alert('Profile updated!');
+        }
+    });
+
+    // User posts rendering handled in app.js
+</script>
+
+</body>
+</html>

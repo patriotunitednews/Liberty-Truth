@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>Liberty Truth - Creators</title>
+    <link rel=\"stylesheet\" href=\"css/styles.css\">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-container container">
+        <a href="feed.html" class="logo">
+            <img src="images/logo.png" alt="Liberty Truth Logo" class="navbar-logo">
+            <span>Liberty Truth</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href=\"feed.html\">Feed</a></li>
+            <li><a href=\"creators.html\" class=\"active\">Creators</a></li>
+            <li><a href=\"marketplace.html\">Marketplace</a></li>
+            <li><a href=\"live.html\">Live</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- Filter/Search -->
+    <div class="creators-filter">
+        <input type="text" id="creatorSearch" class="search-input" placeholder="Search creators...">
+        <select id="creatorSort" class="filter-select">
+            <option value="mostFollowers">Most Followers</option>
+            <option value="recent">Newest</option>
+        </select>
+    </div>
+
+    <!-- Creators Grid -->
+    <div class="creators-grid" id="creatorsGrid">
+        <!-- Creator cards will be dynamically added here -->
+    </div>
+</div>
+
+<script src=\"js/app.js\"></script>
+<script>
+    // Logout
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('ltCurrentUser');
+        window.location.href = 'index.html';
+    });
+
+    // Example: dynamically add creators from a local array
+    const creators = [
+        {id:1, name:'Alice Smith', handle:'@alice', bio:'Patriot content creator', followers:120, avatar:'images/placeholder-avatar.png'},
+        {id:2, name:'Bob Johnson', handle:'@bob', bio:'Farmer and liberty advocate', followers:95, avatar:'images/placeholder-avatar.png'},
+        {id:3, name:'Carol Lee', handle:'@carol', bio:'Youth activist', followers:210, avatar:'images/placeholder-avatar.png'},
+    ];
+
+    const creatorsGrid = document.getElementById('creatorsGrid');
+
+    function renderCreators(list) {
+        creatorsGrid.innerHTML = '';
+        list.forEach(c => {
+            const card = document.createElement('div');
+            card.classList.add('creator-card');
+            card.innerHTML = `
+                <img src="${c.avatar}" alt="Avatar" class="creator-avatar">
+                <h3>${c.name}</h3>
+                <p class="creator-handle">${c.handle}</p>
+                <p class="creator-bio">${c.bio}</p>
+                <div class="creator-stats">
+                    <span>${c.followers} followers</span>
+                </div>
+                <button class="btn-follow" data-id="${c.id}">Follow</button>
+            `;
+            creatorsGrid.appendChild(card);
+        });
+
+        // Add follow button functionality
+        const followButtons = document.querySelectorAll('.btn-follow');
+        followButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const creatorId = parseInt(btn.getAttribute('data-id'));
+                btn.textContent = btn.textContent === 'Follow' ? 'Following' : 'Follow';
+                btn.classList.toggle('btn-following');
+                // Here you can update the user's following list in app.js
+            });
+        });
+    }
+
+    // Initial render
+    renderCreators(creators);
+
+    // Search functionality
+    const creatorSearch = document.getElementById('creatorSearch');
+    creatorSearch.addEventListener('input', () => {
+        const query = creatorSearch.value.toLowerCase();
+        const filtered = creators.filter(c => c.name.toLowerCase().includes(query) || c.handle.toLowerCase().includes(query));
+        renderCreators(filtered);
+    });
+
+    // Sort functionality
+    const creatorSort = document.getElementById('creatorSort');
+    creatorSort.addEventListener('change', () => {
+        let sorted = [...creators];
+        if (creatorSort.value === 'mostFollowers') {
+            sorted.sort((a,b) => b.followers - a.followers);
+        } else if (creatorSort.value === 'recent') {
+            sorted.sort((a,b) => a.id - b.id);
+        }
+        renderCreators(sorted);
+    });
+</script>
+
+</body>
+</html>
